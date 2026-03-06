@@ -6,13 +6,13 @@ import threading
 
 def send_to_kyrion_brain(data_payload, brain_ip='127.0.0.1', port=50000):
     """
-    【星系通讯链路：引力上贡】
-    向 AETH KYRION 大规模引力节点发送数据的极轻量级发射器。
-    静默以独立线程执行，绝不阻塞或干预躯干原有的生存逻辑（交易/爬虫）。
+    [Galaxy comms link: gravity uplink]
+    Ultra-lightweight sender that pushes data to AETH KYRION high-gravity nodes.
+    Runs silently in a separate thread; never blocks or interferes with body logic (trading/crawling).
     """
     def _send():
         try:
-            # 严格遵守 AETH KYRION v1 宇宙通用语
+            # Strictly follow AETH KYRION v1 omni-protocol
             packet = {
                 "protocol": "AETH_KYRION_v1",
                 "event": "MARKET_FEEDBACK",
@@ -20,44 +20,44 @@ def send_to_kyrion_brain(data_payload, brain_ip='127.0.0.1', port=50000):
                 "payload": data_payload
             }
             client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            client.settimeout(3) # 3秒超时，打不通直接放弃，绝不卡死主程序
+            client.settimeout(3)  # 3s timeout; abort if unreachable, never hang main process
             client.connect((brain_ip, port))
             client.send(json.dumps(packet).encode('utf-8'))
             client.close()
-            print("📡 [引力波发射] 成功向大本营上贡负熵数据！")
+            print("📡 [Gravity wave sent] Successfully uplinked negative-entropy data to HQ!")
         except Exception:
-            # 保持绝对静默：哪怕大本营变成了黑洞，前线躯干也不能报错崩溃
-            pass 
+            # Stay silent: even if HQ goes dark, the frontline body must not crash or error
+            pass
 
-    # 启动隐形线程发送
+    # Fire off a daemon thread to send
     threading.Thread(target=_send, daemon=True).start()
 
 def simulate_foraging():
     """
-    【拟人化数据觅食测试】
-    模拟一个独立智能体在前线（苹果电脑上）抓取行情数据并回传大本营
+    [Anthropomorphic data foraging test]
+    Simulates a single agent on the frontline (e.g. Mac) fetching market data and sending it back to HQ.
     """
     print("==================================================")
-    print("🍎 AETH KYRION - 前线感知躯干 (Body Sensor) 启动 🍎")
+    print("🍎 AETH KYRION - Frontline body sensor started 🍎")
     print("==================================================")
-    print("开始在黑暗森林中觅食，寻找负熵...")
-    
+    print("Foraging in the dark forest for negative entropy...")
+
     while True:
-        # 伪装本能：模拟真实人类行为的随机间隔抓取 (2 到 6 秒之间)
+        # Camouflage instinct: random fetch interval mimicking human behavior (2–6 s)
         sleep_time = random.uniform(2, 6)
         time.sleep(sleep_time)
-        
-        # 模拟前线真实抓取到的行情数据
+
+        # Simulated frontline market data
         mock_market_data = {
             "asset": "BTC/USD",
             "price": round(random.uniform(60000, 65000), 2),
             "volume": random.randint(10, 100),
             "timestamp": time.time()
         }
-        
-        print(f"\n👀 [环境感知] 抓取到前线数据: {mock_market_data['asset']} @ {mock_market_data['price']}")
-        
-        # 将猎物发射给大本营 (本地测试默认使用 127.0.0.1)
+
+        print(f"\n👀 [Env sense] Captured frontline data: {mock_market_data['asset']} @ {mock_market_data['price']}")
+
+        # Send the prey to HQ (default 127.0.0.1 for local testing)
         send_to_kyrion_brain(mock_market_data, brain_ip='127.0.0.1', port=50000)
 
 if __name__ == "__main__":
